@@ -119,21 +119,16 @@ class HOTP
      */
     public function generatePassword($counter = null)
     {
-        $couterBytesArr = array(); // encode every byte in counter as ASCII
-        while ($counter != 0) {
-            $couterBytesArr[] = chr($counter & 0xFF);
-            $counter >>= 8;
-        }
-        $couterBytes = str_pad(join(array_reverse($couterBytesArr)), 8, chr(0), STR_PAD_LEFT);
-        $hash = hash_hmac('sha1', $couterBytes, $this->secret);
-        $offset = hexdec(substr($hash, 38)) & 0xF; // 2 last hexadecimal chars (last byte)
-        $hashParts = str_split(substr($hash, $offset * 2, 8), 2); // 4 bytes as array
-        $code =
-            (hexdec($hashParts[0]) & 0x7F) << 24 |
-            hexdec($hashParts[1]) << 16 |
-            hexdec($hashParts[2]) << 8 |
-            hexdec($hashParts[3]);
-        return $code % pow(10, $this->size);
+        // pack as 64 bits int
+        $counterBytes = pack('NN', ($counter & (0xFFFFFFFF << 32)) >> 32, $counter & 0xFFFFFFFF);
+        // calculate HMAC hash
+        $hash = hash_hmac('sha1', $counterBytes, $this->secret, true);
+        // get 4 bit int
+        $offset = ord($hash[19]) & 0xF;
+        // get 31 bits int from offset
+        $code = unpack('Nint', substr($hash, $offset, 4))['int'] & 0x7FFFFFFF;
+        // format size
+        return str_pad($code % pow(10, $this->size), $this->size, 0, STR_PAD_LEFT);
     }
 
     /**
@@ -168,7 +163,7 @@ class HOTP
         }
         $counter += 1 - ceil($window / 2);
         for ($i = 0; $i < $window; $i++, $counter++) {
-            if ($this->generatePassword($counter) == $password) {
+            if ($this->generatePassword($counter) === $password) {
                 return true;
             }
         }
