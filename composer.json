@@ -1,0 +1,22 @@
+{
+    "name": "pedrosancao/php-otp",
+    "description": "PHP implementation of HMAC-based one-time password algorithm according to RFC 4226 and RFC 6238 compatible with Google Authenticator",
+    "keywords": ["otp", "hotp", "totp", "RFC 4226", "RFC 6238", "Google Authenticator", "one-time password", "two steps authentication"],
+    "homepage": "https://github.com/pedrosancao/php-otp",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pedro Sanção",
+            "homepage": "http://pedrosancao.github.io"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4",
+        "pedrosancao/php-random-data": "^1.0"
+    },
+    "autoload": {
+        "psr-4": { "PedroSancao\\": "src/" }
+    }
+}
