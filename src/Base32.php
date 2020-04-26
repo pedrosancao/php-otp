@@ -42,7 +42,10 @@ class Base32
         for ($i = 0; $i < $charsCount; $i++) {
             $binary .= str_pad(decbin($map[$chars[$i]]), 5, 0, STR_PAD_LEFT);
         }
-        $groups = str_split(substr($binary, 0, -strlen($binary) % 8), 8);
+        if (strlen($binary) % 8 !== 0) {
+            $binary = substr($binary, 0, -strlen($binary) % 8);
+        }
+        $groups = str_split($binary, 8);
         $groupsLimit = count($groups);
         for ($i = 0; $i < $groupsLimit; $i++) {
             $decoded .= chr(bindec($groups[$i]));
