@@ -56,13 +56,16 @@ $totp->verify($inputPassword);
 ### Using as client
 
 ```php
-$totp = PedroSancao\OTP\TOTP::createRaw($base32encodedSecret);
+$totp = PedroSancao\OTP\TOTP::create($base32encodedSecret);
+// or
+$totp = PedroSancao\OTP\TOTP::createRaw($storedSecret);
+// or
+$totp = PedroSancao\OTP\TOTP::createFromURI($uriFromQrCode);
 echo $totp->getPassword();
 ```
 
 ## To do list
 
-- Creation from URI
 - Unit tests
 
 ## Licence

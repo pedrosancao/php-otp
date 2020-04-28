@@ -2,8 +2,6 @@
 
 namespace PedroSancao\OTP;
 
-use PedroSancao\OTP\HOTP;
-
 class TOTP extends HOTP
 {
 
@@ -12,7 +10,7 @@ class TOTP extends HOTP
      *
      * @var string
      */
-    protected $type = 'totp';
+    protected static $type = 'totp';
 
     /**
      * Max verication window size

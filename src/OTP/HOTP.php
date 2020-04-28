@@ -4,7 +4,6 @@ namespace PedroSancao\OTP;
 
 use PedroSancao\Base32;
 use PedroSancao\Random;
-use Exception;
 
 class HOTP
 {
@@ -14,7 +13,7 @@ class HOTP
      *
      * @var string
      */
-    protected $type = 'hotp';
+    protected static $type = 'hotp';
 
     /**
      * Max verication window size
@@ -79,10 +78,10 @@ class HOTP
         if (!is_null($secret)) {
             $secret = Base32::decode($secret);
             if ($secret === false) {
-                throw new Exception('invalid base 32 secret');
+                throw new Exception('Invalid base 32 secret');
             }
         }
-        return self::createRaw($secret, $size);
+        return static::createRaw($secret, $size);
     }
 
     /**
@@ -103,12 +102,28 @@ class HOTP
     /**
      * Create the object from URI
      *
-     * @todo implment
      * @param string $uri
+     * @return static
+     *
+     * @throws Exception
      */
-    public static function createFromURI($uri)
+    public static function createFromURI($uri, $size = 6)
     {
-        return false;
+        $fragments = parse_url($uri);
+
+        if ($fragments === false || !key_exists('scheme', $fragments) || $fragments['scheme'] !== 'otpauth' || !key_exists('query', $fragments)) {
+            throw new Exception('Invalid one time password URI');
+        }
+        if (!key_exists('host', $fragments) || $fragments['host'] !== static::$type) {
+            throw new Exception('Invalid one time password type');
+        }
+        $query = [];
+        parse_str($fragments['query'], $query);
+        if (!key_exists('secret', $query)) {
+            throw new Exception('URI contains no secret');
+        }
+        
+        return static::create($query['secret'], $size);
     }
 
     /**
@@ -214,7 +229,7 @@ class HOTP
             $label = $issuer . ':' . $label;
             $params['issuer'] = $issuer;
         }
-        return sprintf('otpauth://%s/%s?%s', $this->type, rawurlencode($label), http_build_query($params));
+        return sprintf('otpauth://%s/%s?%s', static::$type, rawurlencode($label), http_build_query($params));
     }
 
 }
