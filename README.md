@@ -1,5 +1,13 @@
 # A PHP One-Time Password implementation
 
+
+
+![project license](https://img.shields.io/github/license/pedrosancao/php-otp)
+![code size](https://img.shields.io/github/languages/code-size/pedrosancao/php-otp)
+![PHP version](https://img.shields.io/packagist/php-v/pedrosancao/php-otp)
+![packagist version](https://img.shields.io/packagist/v/pedrosancao/php-otp)
+![packagist downloads](https://img.shields.io/packagist/dt/pedrosancao/php-otp)
+
 This small library implements the HMAC-based one-time password algorithms
 used mostly on two steps authentication: time based TOTP
 ([RFC 6238](https://tools.ietf.org/html/rfc6238)) and HOTP
