@@ -212,7 +212,7 @@ class HOTP
      */
     public function getSecretReadable()
     {
-        return chunk_split($this->getSecret(), 4, ' ');
+        return trim(chunk_split($this->getSecret(), 4, ' '));
     }
 
     /**
@@ -224,12 +224,13 @@ class HOTP
      */
     public function getUri($label, $issuer = null)
     {
-        $params = array('secret' => $this->secret);
+        $params = array('secret' => $this->getSecret());
+        $encodedLabel = rawurlencode($label);
         if (!is_null($issuer)) {
-            $label = $issuer . ':' . $label;
+            $encodedLabel = rawurlencode($issuer) . ':' . $encodedLabel;
             $params['issuer'] = $issuer;
         }
-        return sprintf('otpauth://%s/%s?%s', static::$type, rawurlencode($label), http_build_query($params));
+        return sprintf('otpauth://%s/%s?%s', static::$type, $encodedLabel, http_build_query($params));
     }
 
 }
