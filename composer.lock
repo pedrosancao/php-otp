@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ffeb469655b3810f21dfe9f0a741ba0",
+    "content-hash": "4652c1e0ce3e2f6009a7607af227fe88",
     "packages": [
         {
             "name": "pedrosancao/php-random-data",
@@ -2147,7 +2147,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4"
+        "php": ">=7.3"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"
