@@ -7,6 +7,9 @@ use PedroSancao\Random;
 
 class HOTP
 {
+    const ALGORITHM_SHA1 = 'sha1';
+    const ALGORITHM_SHA256 = 'sha256';
+    const ALGORITHM_SHA512 = 'sha512';
 
     /**
      * Implementation type
@@ -37,6 +40,13 @@ class HOTP
     protected $size;
 
     /**
+     * Algorithm used on hash function
+     *
+     * @var string
+     */
+    protected $algorithm = self::ALGORITHM_SHA1;
+
+    /**
      * @param string $secret
      * @param int $size
      */
@@ -44,6 +54,39 @@ class HOTP
     {
         $this->secret = $secret;
         $this->size = $size;
+    }
+
+    /**
+     * Set hashing algorithm to SHA-1
+     *
+     * @return $this
+     */
+    public function useSha1()
+    {
+        $this->algorithm = self::ALGORITHM_SHA1;
+        return $this;
+    }
+
+    /**
+     * Set hashing algorithm to SHA-256
+     *
+     * @return $this
+     */
+    public function useSha256()
+    {
+        $this->algorithm = self::ALGORITHM_SHA256;
+        return $this;
+    }
+
+    /**
+     * Set hashing algorithm to SHA-512
+     *
+     * @return $this
+     */
+    public function useSha512()
+    {
+        $this->algorithm = self::ALGORITHM_SHA512;
+        return $this;
     }
 
     /**
@@ -122,24 +165,24 @@ class HOTP
         if (!key_exists('secret', $query)) {
             throw new Exception('URI contains no secret');
         }
-        
+
         return static::create($query['secret'], $size);
     }
 
     /**
      * Generates a HMAC based password
-     * 
+     *
      * @param int $counter
      * @return string
      */
     public function generatePassword($counter = null)
     {
         // pack as 64 bits int
-        $counterBytes = pack('NN', ($counter & (0xFFFFFFFF << 32)) >> 32, $counter & 0xFFFFFFFF);
+        $counterBytes = pack('N*', 0, $counter);
         // calculate HMAC hash
-        $hash = hash_hmac('sha1', $counterBytes, $this->secret, true);
+        $hash = hash_hmac($this->algorithm, $counterBytes, $this->secret, true);
         // get 4 bit int
-        $offset = ord($hash[19]) & 0xF;
+        $offset = ord($hash[strlen($hash) - 1]) & 0xF;
         // get 31 bits int from offset
         $code = unpack('Nint', substr($hash, $offset, 4))['int'] & 0x7FFFFFFF;
         // format size

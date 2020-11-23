@@ -1,12 +1,11 @@
 # A PHP One-Time Password implementation
 
-
-
 ![project license](https://img.shields.io/github/license/pedrosancao/php-otp)
 ![code size](https://img.shields.io/github/languages/code-size/pedrosancao/php-otp)
 ![PHP version](https://img.shields.io/packagist/php-v/pedrosancao/php-otp)
 ![packagist version](https://img.shields.io/packagist/v/pedrosancao/php-otp)
 ![packagist downloads](https://img.shields.io/packagist/dt/pedrosancao/php-otp)
+![test coverage](https://img.shields.io/codecov/c/github/pedrosancao/php-otp)
 
 This small library implements the HMAC-based one-time password algorithms
 used mostly on two steps authentication: time based TOTP
@@ -17,7 +16,7 @@ Easily and quick allows to configure and use mobile apps like Google Authenticat
 
 ## Requirements
 
-php >= 5.4
+php >= 7.3
 
 ## Installation
 
@@ -72,9 +71,18 @@ $totp = PedroSancao\OTP\TOTP::createFromURI($uriFromQrCode);
 echo $totp->getPassword();
 ```
 
+### Change hashing algorithm
+
+SHA1 is the default method. If you want to use another after create a new instance
+with one of `create*` methods call `useSha256` or `useSha512`: 
+
+```php
+$totp = PedroSancao\OTP\TOTP::createRaw($storedSecret)->useSha256();
+```
+
 ## To do list
 
-- Unit tests
+- Implement [all URI parameters](https://github.com/google/google-authenticator/wiki/Key-Uri-Format)
 
 ## Licence
 
