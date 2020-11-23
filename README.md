@@ -6,6 +6,7 @@
 ![packagist version](https://img.shields.io/packagist/v/pedrosancao/php-otp)
 ![packagist downloads](https://img.shields.io/packagist/dt/pedrosancao/php-otp)
 ![test coverage](https://img.shields.io/codecov/c/github/pedrosancao/php-otp)
+![tests status](https://img.shields.io/github/workflow/status/pedrosancao/php-otp/PHP%20Composer?label=tests)
 
 This small library implements the HMAC-based one-time password algorithms
 used mostly on two steps authentication: time based TOTP
@@ -16,7 +17,8 @@ Easily and quick allows to configure and use mobile apps like Google Authenticat
 
 ## Requirements
 
-php >= 7.3
+Although it should work even on PHP 5.4. We strongly recommend using PHP >= 7.3 as
+lower versions have [reached end of life](https://www.php.net/supported-versions.php).
 
 ## Installation
 
