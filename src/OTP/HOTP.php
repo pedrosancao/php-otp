@@ -3,7 +3,6 @@
 namespace PedroSancao\OTP;
 
 use PedroSancao\Base32;
-use PedroSancao\Random;
 
 class HOTP
 {
@@ -137,7 +136,7 @@ class HOTP
     public static function createRaw($secret = null, $size = 6)
     {
         if (is_null($secret)) {
-            $secret = Random::raw(15);
+            $secret = random_bytes(16);
         }
         return new static($secret, $size);
     }
