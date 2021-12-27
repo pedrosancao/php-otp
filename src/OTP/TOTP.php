@@ -37,6 +37,32 @@ class TOTP extends HOTP
     }
 
     /**
+     * Gets current Time Step value
+     *
+     * @return int
+     */
+    public function getTimeStep()
+    {
+        return $this->timeStep;
+    }
+
+    /**
+     * Sets Time Step value
+     *
+     * @param int $step
+     * @return int
+     * @throws Exception
+     */
+    public function setTimeStep($step)
+    {
+        if (! is_int($step) || ! $step > 0) {
+            throw new Exception('Invalid time step');
+        }
+
+        return $this->timeStep = $step;
+    }
+
+    /**
      * Apply on counter before generation password
      *
      * @param int $counter
